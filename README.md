@@ -1,0 +1,1 @@
+# nstap_elastic_stack
