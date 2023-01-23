@@ -109,5 +109,3 @@ resource "libvirt_domain" "vm"{
   }
 }
 
-
-
