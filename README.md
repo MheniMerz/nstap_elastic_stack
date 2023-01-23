@@ -11,7 +11,7 @@ sudo apt install virt-manager virt-top libguestfs-tools  -y
 disable apparmor or selinux (depending on the linux distribution) for qemu
 
 ```bash
-echo "security_driver" >> /etc/libvirt/qemu.conf
+echo 'security_driver="none"' >> /etc/libvirt/qemu.conf
 sudo systemctl restart libvirt-guests.service
 sudo systemctl restart libvirtd.service
 
