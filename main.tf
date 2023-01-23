@@ -23,7 +23,7 @@ variable "VM_HOSTNAME" {
 }
 
 variable "VM_IMG_URL" {
-  default = "https://download.cirros-cloud.net/0.6.1/cirros-0.6.1-arm-disk.img"
+  default = "https://releases.ubuntu.com/focal/ubuntu-20.04.5-live-server-amd64.iso"
   type = string
 }
 
