@@ -23,7 +23,7 @@ variable "VM_HOSTNAME" {
 }
 
 variable "VM_IMG_URL" {
-  default = "https://releases.ubuntu.com/focal/ubuntu-20.04.5-live-server-amd64.iso"
+  default = "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64-disk-kvm.img"
   type = string
 }
 
@@ -33,12 +33,12 @@ variable "VM_IMG_FORMAT"{
 }
 
 variable "VM_CIDR_RANGE"{
-  default = "10.11.200.0/24"
+  default = "192.168.0.0/24"
   type = string
 }
 
 provider "libvirt"{
-  uri = "qemu:///system"
+  uri = "qemu+ssh://antd@10.11.200.37/system"
 }
 
 data "template_file" "user_data" {
