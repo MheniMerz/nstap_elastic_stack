@@ -1,5 +1,16 @@
 # creating elastic stack cluster with terraform
 
+## architecture
+
+we will use the ELK(Elasticsearch, Logstash, Kibana) stack to collect and store network logs in order to later apply machine learning algorithms to have better visibility and enhance network security.
+
+we will deploy 5 storage nodes (Elasticsearch) following the Hot, warm, and cold data storage strategy which categorizes data based on access frequency (hot data being the most accessed and cold data the lease accesssed data), in this implementation hot data is stored on SSD drives and warm and cold data is stored on HDD drives.
+
+we will also deploy 2 data processing nodes (Logstash), 2 messaging queues (Kafka) and one dashboard node (Kibana).
+
+all the nodes will run on virtual machines using qemu and libvirt virtualization tools on top of linux (Ubuntu20.04) baremetal hosts as shown in figure 1
+
+![architecture](assets/architecture.png "Figure 01: ELK deployment architecture")
 ## perpare the host machines
 
 install virtualization packages
