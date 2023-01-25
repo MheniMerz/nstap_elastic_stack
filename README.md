@@ -52,6 +52,13 @@ wget https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v
 
 ## create the infrastructure with terraform
 
+clone this repository
+```bash
+git clone https://github.com/mhenimerz/nstap_elastic_stack
+cd nstap_elastic_stack
+```
+
+use terraform to create the infrastructure
 ```bash
 terraform init #initialize terraform and get the required providers
 terraform plan #check what will be applied this command will not create anything
