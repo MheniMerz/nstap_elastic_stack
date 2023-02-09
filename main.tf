@@ -18,12 +18,12 @@ variable "VM_USER" {
 }
 
 variable "VM_HOSTNAME" {
-  default = "vm4"
+  default = "vm"
   type = string
 }
 
 variable "VM_IMG_URL" {
-  default = "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64-disk-kvm.img"
+  default = "/tmp/focal-server-cloudimg-amd64-disk-kvm.img"
   type = string
 }
 
@@ -37,8 +37,13 @@ variable "VM_CIDR_RANGE"{
   type = string
 }
 
+variable "DISK_SIZE"{
+  #20G
+  default = 1024*1024*1024*20
+}
+
 provider "libvirt"{
-  uri = "qemu+ssh://antd@10.11.200.37/system"
+  uri = "qemu:///system"
 }
 
 data "template_file" "user_data" {
@@ -58,12 +63,21 @@ resource "libvirt_pool" "vm"{
   path = "/tmp/terraform-provider-libvirt-pool-cirros-${var.VM_HOSTNAME}"
 }
 
+resource "libvirt_volume" "base_volume"{
+  count = var.VM_COUNT
+  name = "${var.VM_HOSTNAME}-${count.index}_base_volume.${var.VM_IMG_FORMAT}"
+  pool = libvirt_pool.vm.name
+  source = var.VM_IMG_URL
+  format = var.VM_IMG_FORMAT
+}
+
 resource "libvirt_volume" "vm"{
   count = var.VM_COUNT
   name = "${var.VM_HOSTNAME}-${count.index}_volume.${var.VM_IMG_FORMAT}"
   pool = libvirt_pool.vm.name
-  source = var.VM_IMG_URL
   format = var.VM_IMG_FORMAT
+  size = var.DISK_SIZE
+  base_volume_id = libvirt_volume.base_volume[count.index].id
 }
 
 resource "libvirt_network" "vm_public_network"{
@@ -89,8 +103,8 @@ resource "libvirt_cloudinit_disk" "cloudinit"{
 resource "libvirt_domain" "vm"{
   count = var.VM_COUNT
   name = "${var.VM_HOSTNAME}-${count.index}"
-  memory = "256"
-  vcpu = 1
+  memory = "4096"
+  vcpu = 4
 
   cloudinit = "${libvirt_cloudinit_disk.cloudinit.id}"
   network_interface{
@@ -108,4 +122,9 @@ resource "libvirt_domain" "vm"{
     volume_id = "${libvirt_volume.vm[count.index].id}"
   }
 }
+
+
+#output "vm_ip" {
+#  value = libvirt_domain.vm[count.index].network_interface[0].addresses[0]
+#}
 
