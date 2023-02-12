@@ -7,11 +7,6 @@ terraform{
   }
 }
 
-variable "VM_COUNT" {
-  default = 1
-  type = number
-}
-
 variable "VM_USER" {
   default = "mheni"
   type = string
@@ -23,7 +18,7 @@ variable "VM_HOSTNAME" {
 }
 
 variable "VM_IMG_URL" {
-  default = "/tmp/focal-server-cloudimg-amd64-disk-kvm.img"
+  default = "http://cloud-images.ubuntu.com/releases/bionic/release-20191008/ubuntu-18.04-server-cloudimg-amd64.img"
   type = string
 }
 
@@ -64,33 +59,18 @@ resource "libvirt_pool" "vm"{
 }
 
 resource "libvirt_volume" "base_volume"{
-  count = var.VM_COUNT
-  name = "${var.VM_HOSTNAME}-${count.index}_base_volume.${var.VM_IMG_FORMAT}"
+  name = "${var.VM_HOSTNAME}_base_volume.${var.VM_IMG_FORMAT}"
   pool = libvirt_pool.vm.name
   source = var.VM_IMG_URL
   format = var.VM_IMG_FORMAT
 }
 
 resource "libvirt_volume" "vm"{
-  count = var.VM_COUNT
-  name = "${var.VM_HOSTNAME}-${count.index}_volume.${var.VM_IMG_FORMAT}"
+  name = "${var.VM_HOSTNAME}_volume.${var.VM_IMG_FORMAT}"
   pool = libvirt_pool.vm.name
   format = var.VM_IMG_FORMAT
   size = var.DISK_SIZE
-  base_volume_id = libvirt_volume.base_volume[count.index].id
-}
-
-resource "libvirt_network" "vm_public_network"{
-  name = "${var.VM_HOSTNAME}_network"
-  mode = "nat"
-  domain = "${var.VM_HOSTNAME}.local"
-  addresses = ["${var.VM_CIDR_RANGE}"]
-  dhcp{
-    enabled = true
-  }
-  dns{
-    enabled = true
-  }
+  base_volume_id = libvirt_volume.base_volume.id
 }
 
 resource "libvirt_cloudinit_disk" "cloudinit"{
@@ -101,8 +81,7 @@ resource "libvirt_cloudinit_disk" "cloudinit"{
 }
 
 resource "libvirt_domain" "vm"{
-  count = var.VM_COUNT
-  name = "${var.VM_HOSTNAME}-${count.index}"
+  name = "${var.VM_HOSTNAME}"
   memory = "4096"
   vcpu = 4
 
@@ -119,12 +98,26 @@ resource "libvirt_domain" "vm"{
   }
 
   disk {
-    volume_id = "${libvirt_volume.vm[count.index].id}"
+    volume_id = "${libvirt_volume.vm.id}"
+  }
+}
+
+resource "libvirt_network" "vm_public_network"{
+  name = "${var.VM_HOSTNAME}_network"
+  mode = "nat"
+  domain = "${var.VM_HOSTNAME}.local"
+  addresses = ["${var.VM_CIDR_RANGE}"]
+  dhcp{
+    enabled = true
+  }
+  dns{
+    enabled = true
   }
 }
 
 
+
 #output "vm_ip" {
-#  value = libvirt_domain.vm[count.index].network_interface[0].addresses[0]
+#  value = libvirt_domain.vm.network_interface[0].addresses
 #}
 
