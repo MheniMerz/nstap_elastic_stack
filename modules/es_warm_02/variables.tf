@@ -6,25 +6,23 @@ variable "KVM_HOST_IP" {
   type = string
 }
 variable "VM_HOSTNAME" {
-  default = "elasticsearch-hot-01"
+  default = "elasticsearch-warm-02"
   type = string
 }
 
 variable "VM_MEMORY"{
   #60GB
-  # default = 61440
-  default = 4069
+  default = 61440
 }
 
 variable "VM_CPU"{
   # 22 Cores
-  # default = 22
-  default = 2
+   default = 22
 }
 
 variable "VM_DISK_SIZE"{
-  #140G
-  default = 1024*1024*1024*140
+  #1Tb
+  default = 1024*1024*1024*1024
 }
 
 variable "VM_USER" {
