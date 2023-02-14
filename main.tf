@@ -27,18 +27,10 @@ variable "VM_CIDR_RANGE"{
   type = string
 }
 
-variable "KVM_HOST_USER"{
-  default = "mheni"
-  type = string
-}
-
-variable "KVM_HOST_IP"{
-  default = "127.0.0.1"
-  type = string
-}
-
 module "es_hot_01"{
   source = "./modules/es_hot_01"
-  KVM_HOST_USER = var.KVM_HOST_USER
-  KVM_HOST_IP = var.KVM_HOST_IP
+}
+
+module "es_hot_02"{
+  source = "./modules/es_hot_02"
 }
