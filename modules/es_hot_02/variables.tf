@@ -1,10 +1,18 @@
 variable "KVM_HOST_USER" {
+  default = "antd"
   type = string
 }
 
 variable "KVM_HOST_IP" {
+  default = "10.11.200.39"
   type = string
 }
+
+variable "KVM_HOST_SSH_KEY"{
+  default = "/home/mheni/.ssh/id_rsa"
+  type = string
+}
+
 variable "VM_HOSTNAME" {
   default = "elasticsearch-hot-02"
   type = string
