@@ -7,28 +7,16 @@ terraform{
   }
 }
 
-variable "VM_USER" {
-  default = "mheni"
-  type = string
-}
-
-variable "VM_IMG_URL" {
-  default = "http://cloud-images.ubuntu.com/releases/bionic/release-20191008/ubuntu-18.04-server-cloudimg-amd64.img"
-  type = string
-}
-
-variable "VM_IMG_FORMAT"{
-  default = "qcow2"
-  type = string
-}
-
-variable "VM_CIDR_RANGE"{
-  default = "192.168.0.0/24"
-  type = string
-}
-
 module "es_hot_01"{
   source = "./modules/es_hot_01"
+  HTTP_PROXY = var.HTTP_PROXY
+  KVM_HOST_USER = var.KVM_HOST_USER
+  KVM_HOST_IP = "10.11.200.39"
+  KVM_HOST_SSH_KEY = var.KVM_HOST_SSH_KEY
+  VM_USER = var.VM_USER
+  VM_IMG_FORMAT = var.VM_IMG_FORMAT
+  VM_IMG_URL = var.VM_IMG_URL
+  VM_CIDR_RANGE = var.VM_CIDR_RANGE
 }
 
 module "es_hot_02"{
