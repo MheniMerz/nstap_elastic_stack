@@ -16,6 +16,7 @@ data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
   vars = {
     VM_USER = var.VM_USER
+    HTTP_PROXY = var.HTTP_PROXY
   }
 }
 
