@@ -13,6 +13,11 @@ variable "KVM_HOST_SSH_KEY"{
   type = string
 }
 
+variable "HTTP_PROXY"{
+  type = string
+}
+
+
 variable "VM_HOSTNAME" {
   default = "elasticsearch-hot-02"
   type = string
