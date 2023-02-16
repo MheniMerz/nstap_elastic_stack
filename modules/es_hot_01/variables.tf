@@ -22,14 +22,12 @@ variable "VM_HOSTNAME" {
 
 variable "VM_MEMORY"{
   #60GB
-  # default = 61440
-  default = 4069
+  default = 61440
 }
 
 variable "VM_CPU"{
   # 22 Cores
-  # default = 22
-  default = 2
+  default = 22
 }
 
 variable "VM_DISK_SIZE"{
