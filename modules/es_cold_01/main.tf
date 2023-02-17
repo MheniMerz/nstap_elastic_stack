@@ -9,13 +9,15 @@ terraform{
 }
 
 provider "libvirt"{
-  uri = "qemu+ssh://${var.KVM_HOST_USER}@${var.KVM_HOST_IP}/system"
+  uri = "qemu+ssh://${var.KVM_HOST_USER}@${var.KVM_HOST_IP}/system?keyfile=${var.KVM_HOST_SSH_KEY}"
 }
 
 data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
   vars = {
     VM_USER = var.VM_USER
+    VM_HOSTNAME = var.VM_HOSTNAME
+    HTTP_PROXY = var.HTTP_PROXY
   }
 }
 
@@ -51,18 +53,18 @@ resource "libvirt_cloudinit_disk" "cloudinit"{
   pool			= libvirt_pool.vm.name
 }
 
-resource "libvirt_network" "vm_public_network"{
-  name = "${var.VM_HOSTNAME}_network"
-  mode = "nat"
-  domain = "${var.VM_HOSTNAME}.local"
-  addresses = ["${var.VM_CIDR_RANGE}"]
-  dhcp{
-    enabled = true
-  }
-  dns{
-    enabled = true
-  }
-}
+#resource "libvirt_network" "vm_public_network"{
+#  name = "${var.VM_HOSTNAME}_network"
+#  mode = "nat"
+#  domain = "${var.VM_HOSTNAME}.local"
+#  addresses = ["${var.VM_CIDR_RANGE}"]
+#  dhcp{
+#    enabled = true
+#  }
+#  dns{
+#    enabled = true
+#  }
+#}
 
 resource "libvirt_domain" "vm"{
   name = "${var.VM_HOSTNAME}"
@@ -70,9 +72,10 @@ resource "libvirt_domain" "vm"{
   vcpu = "${var.VM_CPU}"
 
   cloudinit = "${libvirt_cloudinit_disk.cloudinit.id}"
+  
   network_interface{
-    network_id = "${libvirt_network.vm_public_network.id}"
-    network_name = "${libvirt_network.vm_public_network.name}"
+    network_name = "default" 
+    wait_for_lease = true
   }
 
   console {
