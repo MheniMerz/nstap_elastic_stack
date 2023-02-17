@@ -4,7 +4,6 @@ variable "KVM_HOST_USER" {
 }
 
 variable "KVM_HOST_IP" {
-  default = "10.11.200.39"
   type = string
 }
 
