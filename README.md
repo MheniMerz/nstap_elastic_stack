@@ -30,6 +30,14 @@ sudo systemctl restart libvirt-guests.service
 sudo systemctl restart libvirtd.service
 ```
 
+allow traffic from the VMs to go out, we assume you already know the subnet you will be using for the VMs.
+in our case we use a different subnet per host machine (i.e. every host machine has a different subnet for its virtual machines and the traffic between VMs is routed layer 3 traffic).
+
+see example bellow where `192.168.37.0/24` is the VM subnet 
+```bash
+iptables -I FORWARD -m state -d 192.168.37.0/24 --state NEW,RELATED,ESTABLISHED -j ACCEPT 
+```
+
 ## install terraform on your workstation or laptop
 
 ```bash
