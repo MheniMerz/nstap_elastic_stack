@@ -2,14 +2,17 @@
 terraform{
   required_providers {
     libvirt = {
-      source = "dmacvicar/libvirt"
-      version = "0.6.3"
+      source = "hashicorp/vsphere"
+      version = "2.2.0"
     }
   }
 }
 
-provider "libvirt"{
-  uri = "qemu+ssh://${var.KVM_HOST_USER}@${var.KVM_HOST_IP}/system?keyfile=${var.KVM_HOST_SSH_KEY}"
+provider "vsphere" {
+  user                 = var.vsphere_user
+  password             = var.vsphere_password
+  vsphere_server       = var.vsphere_vcenter
+  allow_unverified_ssl = true
 }
 
 data "template_file" "user_data" {
