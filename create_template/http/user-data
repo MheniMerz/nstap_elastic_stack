@@ -16,9 +16,9 @@ autoinstall:
                 ens192:
                     dhcp4: true
     identity:
-        hostname: ubuntu-server
+        hostname: test-server
         username: ubuntu
-        password: "$6$rounds=4096$ntlX/dlo6b$HXaLN4RcLIGaEDdQdR2VTYi9pslSeXWL131MqaakqE285Nv0kW9KRontQYivCbycZerUMcjVsuLl2V8bbdadI1"
+        password: "ubuntu"
     ssh:
         install-server: yes
         allow-pw: yes
